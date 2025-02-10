@@ -2,24 +2,34 @@ import { useToast } from "@/hooks/use-toast";
 import { PostsPage } from "@/lib/types";
 import {
   InfiniteData,
+  Query,
   QueryFilters,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
 import { createPost } from "../actions/create-post-actions";
+import { useSession } from "@/hooks/session-provider";
 
 export function useCreatePost() {
   const { toast } = useToast();
 
   const queryClient = useQueryClient();
 
+  const { user } = useSession();
+
   const mutation = useMutation({
     mutationFn: createPost,
     onSuccess: async (newPost) => {
-      const queryFilter: QueryFilters<InfiniteData<PostsPage, string | null>> =
-        {
-          queryKey: ["post-feed", "for-you"],
-        };
+      const queryFilter = {
+        queryKey: ["post-feed"],
+        predicate(query) {
+          return (
+            query.queryKey.includes("for-you") ||
+            (query.queryKey.includes("user-posts") &&
+              query.queryKey.includes(user.id))
+          );
+        },
+      } satisfies QueryFilters<InfiniteData<PostsPage, string | null>>;
 
       await queryClient.cancelQueries(queryFilter);
 
@@ -45,7 +55,16 @@ export function useCreatePost() {
       queryClient.invalidateQueries({
         queryKey: queryFilter.queryKey,
         predicate(query) {
-          return !query.state.data;
+          return (
+            queryFilter.predicate(
+              query as Query<
+                InfiniteData<PostsPage, string | null>,
+                Error,
+                InfiniteData<PostsPage, string | null>,
+                readonly unknown[]
+              >
+            ) && !query.state.data
+          );
         },
       });
       toast({
