@@ -6,6 +6,7 @@ import { FollowerCount } from "./follower-count";
 import { Button } from "@/components/ui/button";
 import { FollowButton } from "@/features/followers/components/follow-button";
 import { Linkify } from "@/components/linkify";
+import { EditProfileButton } from "./edit-profile-button";
 
 interface UserProfileProps {
   user: UserData;
@@ -47,7 +48,7 @@ export const UserProfile = async ({
           </div>
         </div>
         {user.id === loggedInUserId ? (
-          <Button>Edit Profile</Button>
+          <EditProfileButton user={user} />
         ) : (
           <FollowButton userId={user.id} initialState={followerInfo} />
         )}

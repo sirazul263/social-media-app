@@ -4,8 +4,9 @@ import { getUserDataSelect } from "@/lib/types";
 
 export async function GET(
   req: Request,
-  { params: { username } }: { params: { username: string } }
+  context: { params: { username: string } }
 ) {
+  const { username } = await context.params; // Destructure inside
   try {
     const { user: loggedInUser } = await validateRequest();
     if (!loggedInUser) {

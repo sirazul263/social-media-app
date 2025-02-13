@@ -7,6 +7,9 @@ import Link from "next/link";
 import { PostMoreButton } from "./post-more-button";
 import { Linkify } from "@/components/linkify";
 import { UserTooltip } from "@/features/users/components/user-tooltip";
+import { MediaPreview } from "./media-preview";
+import { LikeButton } from "@/features/likes/components/like-button";
+import { BookmarkButton } from "@/features/bookmarks/components/bookmark-button";
 
 interface PostDataProps {
   post: PostData;
@@ -50,6 +53,27 @@ export const Post = ({ post }: PostDataProps) => {
       <Linkify>
         <div className="whitespace-pre-line break-words">{post.content}</div>
       </Linkify>
+      {!!post.attachment.length && (
+        <MediaPreview attachment={post.attachment} />
+      )}
+      <hr className="text-muted-foreground" />
+      <div className="flex justify-between gap-5">
+        <LikeButton
+          postId={post.id}
+          initialState={{
+            likes: post._count.likes,
+            isLikedByUser: post.likes.some((like) => like.userId === user.id),
+          }}
+        />
+        <BookmarkButton
+          postId={post.id}
+          initialState={{
+            isBookmarkedByUser: post.bookmarks.some(
+              (bookmark) => bookmark.userId === user.id
+            ),
+          }}
+        />
+      </div>
     </article>
   );
 };

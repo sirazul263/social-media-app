@@ -1,43 +1,29 @@
 import { validateRequest } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { FollowerInfo } from "@/lib/types";
+import { BookmarkInfo, LikeInfo } from "@/lib/types";
 
 export async function GET(
   req: Request,
-  context: { params: { userId: string } }
+  context: { params: { postId: string } }
 ) {
   try {
-    const { userId } = await context.params; // Destructure inside
+    const { postId } = await context.params; // Destructure inside
     const { user: loggedInUser } = await validateRequest();
     if (!loggedInUser) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        followers: {
-          where: {
-            followerId: loggedInUser.id,
-          },
-          select: {
-            followerId: true,
-          },
-        },
-        _count: {
-          select: {
-            followers: true,
-          },
+    const bookmark = await prisma.bookmark.findUnique({
+      where: {
+        userId_postId: {
+          userId: loggedInUser.id,
+          postId: postId,
         },
       },
     });
 
-    if (!user) {
-      return Response.json({ error: "User not found" }, { status: 404 });
-    }
-    const data: FollowerInfo = {
-      followers: user._count.followers,
-      isFollowedByUser: !!user.followers.length,
+    const data: BookmarkInfo = {
+      isBookmarkedByUser: !!bookmark,
     };
 
     return Response.json(data);
@@ -49,22 +35,22 @@ export async function GET(
 
 export async function POST(
   req: Request,
-  context: { params: { userId: string } }
+  context: { params: { postId: string } }
 ) {
   try {
-    const { userId } = await context.params; // Destructure inside
+    const { postId } = await context.params; // Destructure inside
     const { user: loggedInUser } = await validateRequest();
     if (!loggedInUser) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
-    await prisma.follow.upsert({
+    await prisma.bookmark.upsert({
       where: {
-        followerId_followingId: {
-          followerId: loggedInUser.id,
-          followingId: userId,
+        userId_postId: {
+          userId: loggedInUser.id,
+          postId: postId,
         },
       },
-      create: { followerId: loggedInUser.id, followingId: userId },
+      create: { userId: loggedInUser.id, postId: postId },
       update: {},
     });
     return new Response();
@@ -76,18 +62,18 @@ export async function POST(
 
 export async function DELETE(
   req: Request,
-  context: { params: { userId: string } }
+  context: { params: { postId: string } }
 ) {
   try {
-    const { userId } = await context.params; // Destructure inside
+    const { postId } = await context.params; // Destructure inside
     const { user: loggedInUser } = await validateRequest();
     if (!loggedInUser) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
-    await prisma.follow.deleteMany({
+    await prisma.bookmark.deleteMany({
       where: {
-        followerId: loggedInUser.id,
-        followingId: userId,
+        userId: loggedInUser.id,
+        postId: postId,
       },
     });
     return new Response();
