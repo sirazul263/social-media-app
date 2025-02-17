@@ -10,6 +10,9 @@ import { UserTooltip } from "@/features/users/components/user-tooltip";
 import { MediaPreview } from "./media-preview";
 import { LikeButton } from "@/features/likes/components/like-button";
 import { BookmarkButton } from "@/features/bookmarks/components/bookmark-button";
+import { useState } from "react";
+import { CommentButton } from "@/features/comments/components/comment-button";
+import { CommentSection } from "@/features/comments/components/comment-section";
 
 interface PostDataProps {
   post: PostData;
@@ -17,6 +20,9 @@ interface PostDataProps {
 
 export const Post = ({ post }: PostDataProps) => {
   const { user } = useSession();
+
+  const [showComments, setShowComments] = useState(false);
+
   return (
     <article className="group/post space-y-3 rounded-2xl bg-card p-5 shadow-sm">
       <div className="flex justify-between gap-3">
@@ -58,13 +64,19 @@ export const Post = ({ post }: PostDataProps) => {
       )}
       <hr className="text-muted-foreground" />
       <div className="flex justify-between gap-5">
-        <LikeButton
-          postId={post.id}
-          initialState={{
-            likes: post._count.likes,
-            isLikedByUser: post.likes.some((like) => like.userId === user.id),
-          }}
-        />
+        <div className="flex items-center gap-5">
+          <LikeButton
+            postId={post.id}
+            initialState={{
+              likes: post._count.likes,
+              isLikedByUser: post.likes.some((like) => like.userId === user.id),
+            }}
+          />
+          <CommentButton
+            post={post}
+            onClick={() => setShowComments(!showComments)}
+          />
+        </div>
         <BookmarkButton
           postId={post.id}
           initialState={{
@@ -74,6 +86,7 @@ export const Post = ({ post }: PostDataProps) => {
           }}
         />
       </div>
+      {showComments && <CommentSection post={post} />}
     </article>
   );
 };

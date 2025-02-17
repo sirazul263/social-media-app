@@ -7,6 +7,7 @@ import { HTTPError } from "ky";
 import { PropsWithChildren } from "react";
 import { UserTooltip } from "./user-tooltip";
 import Link from "next/link";
+import { redirect } from "next/dist/server/api-utils";
 
 interface UserLinkWithTooltipProps extends PropsWithChildren {
   username: string;
@@ -22,10 +23,7 @@ export const UserLinkWithTooltip = ({
       const response = await kyInstance
         .get(`/api/users/username/${username}`)
         .json<UserData>();
-      return {
-        ...response,
-        created_at: new Date(response.created_at), // Convert string to Date
-      };
+      return response;
     },
     retry(failureCount, error) {
       if (error instanceof HTTPError && error.response.status === 404) {

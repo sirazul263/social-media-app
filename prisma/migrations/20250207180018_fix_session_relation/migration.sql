@@ -8,7 +8,7 @@ CREATE TABLE "users" (
     "googleId" TEXT,
     "avatarUrl" TEXT,
     "bio" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
