@@ -7,7 +7,6 @@ import { HTTPError } from "ky";
 import { PropsWithChildren } from "react";
 import { UserTooltip } from "./user-tooltip";
 import Link from "next/link";
-import { redirect } from "next/dist/server/api-utils";
 
 interface UserLinkWithTooltipProps extends PropsWithChildren {
   username: string;

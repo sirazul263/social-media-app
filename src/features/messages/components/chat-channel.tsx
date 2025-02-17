@@ -1,11 +1,5 @@
 import { cn } from "@/lib/utils";
-import {
-  Channel,
-  ChannelHeader,
-  MessageInput,
-  MessageList,
-  Window,
-} from "stream-chat-react";
+import { Channel, MessageInput, MessageList, Window } from "stream-chat-react";
 import { CustomerChannelHeader } from "./custom-channel-header";
 
 interface ChatChannelProps {

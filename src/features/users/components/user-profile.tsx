@@ -3,7 +3,6 @@ import { FollowerInfo, UserData } from "@/lib/types";
 import { formatNumber } from "@/lib/utils";
 import { formatDate } from "date-fns";
 import { FollowerCount } from "./follower-count";
-import { Button } from "@/components/ui/button";
 import { FollowButton } from "@/features/followers/components/follow-button";
 import { Linkify } from "@/components/linkify";
 import { EditProfileButton } from "./edit-profile-button";

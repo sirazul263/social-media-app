@@ -31,7 +31,7 @@ export const PostEditor = () => {
     onDrop: startUpload,
   });
 
-  const { onClick, ...rootProps } = getRootProps();
+  const { ...rootProps } = getRootProps();
 
   const editor = useEditor({
     extensions: [

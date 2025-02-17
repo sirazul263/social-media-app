@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { Bookmark, Home, Mail } from "lucide-react";
+import { Bookmark, Home } from "lucide-react";
 import { NotificationsButton } from "@/features/notifications/components/notifications-button";
 import { validateRequest } from "@/lib/auth";
 import prisma from "@/lib/prisma";

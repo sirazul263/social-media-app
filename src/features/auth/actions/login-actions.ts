@@ -5,7 +5,6 @@ import { lucia } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { verify } from "@node-rs/argon2";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 export async function login(credentials: LoginValues) {
   try {

@@ -10,7 +10,7 @@ export const MediaPreview = ({ attachment }: MediaPreviewProps) => {
   return (
     <div
       className={cn(
-        "flex flex-col- gap-3",
+        "flex flex-col gap-3",
         attachment.length > 1 && "sm:grid sm:grid-cols-2"
       )}
     >
@@ -40,7 +40,11 @@ export const MediaPreview = ({ attachment }: MediaPreviewProps) => {
           );
         }
 
-        return <p className="text-destructive">Unsupported media type</p>;
+        return (
+          <p key={index} className="text-destructive">
+            Unsupported media type
+          </p>
+        );
       })}
     </div>
   );

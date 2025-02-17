@@ -2,7 +2,6 @@
 import { LikeInfo } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
 import kyInstance from "@/lib/ky";
 import { useLikeInfo } from "../hooks/use-like-info";
 import { Heart } from "lucide-react";
