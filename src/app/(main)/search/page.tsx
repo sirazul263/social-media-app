@@ -1,4 +1,5 @@
 import { TrendsSidebar } from "@/components/trends-sidebar";
+import { SearchMain } from "@/features/search/components/search-main";
 import { Metadata } from "next";
 
 interface PageProps {
@@ -21,10 +22,11 @@ const SearchResults = async ({ searchParams }: PageProps) => {
     <main className="w-full min-w-0 flex gap-5">
       <div className="w-full min-w-0 space-y-5">
         <div className="rounded-2xl bg-card p-5 shadow-sm">
-          <h1 className="text-center text-2xl font-bold">
+          <h1 className="text-center text-2xl font-bold line-clamp-2 break-all break-words">
             Search results for &quot;{q}&quot;
           </h1>
         </div>
+        <SearchMain query={q} />
       </div>
       <TrendsSidebar />
     </main>
